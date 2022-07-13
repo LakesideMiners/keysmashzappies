@@ -1,0 +1,104 @@
+<!-- adpated from https://github.com/galenguyer/galenguyer.github.io.v1/blob/7bac2fa62bf89dd97e4321faa745bf3fd2a08c06/keysmash.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <script>
+      // Original code in C# by @HOGGARB
+      function generateSmash(length) {
+        length -= 1;
+        var optsa = [
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "s",
+          "s",
+          "s",
+          "s",
+          "s",
+          "s",
+          "s",
+          "d",
+          "f",
+          "j",
+          "k",
+          "l",
+          "a",
+          "s",
+          "d",
+          "f",
+          "j",
+          "k",
+          "l",
+          ";",
+          "r",
+          "q",
+          "e",
+          "p",
+          "i",
+        ];
+        //console.log(optsa);
+        var result = optsa[Math.floor(Math.random() * optsa.length)];
+        //console.log(result);
+        var keys = [
+          "a",
+          "s",
+          "d",
+          "f",
+          "j",
+          "k",
+          "l",
+          "a",
+          "s",
+          "d",
+          "f",
+          "j",
+          "k",
+          "l",
+          ";",
+          "r",
+          "q",
+          "e",
+          "p",
+          "i",
+        ];
+        while (length > 0) {
+          length -= 1;
+          keys = keys.filter((k) => k != result.slice(-1));
+          keys = keys.filter((k) => k != result.slice(-2).charAt(0));
+          result +=
+            keys[
+              window.crypto.getRandomValues(new Uint8Array(1))[0] % keys.length
+            ];
+          keys.push(result.slice(-2).charAt(0));
+          keys.push(result.slice(-3).charAt(0));
+        }
+        console.log("__label__yes " + result);
+      }
+      for (let i = 0; i < 5; i++) {
+        generateSmash(8 + Math.floor(Math.random() * 12));
+      }
+      for (let i = 0; i < 200; i++) {
+        generateSmash(7 + Math.floor(Math.random() * 12));
+      }
+      for (let i = 0; i < 200; i++) {
+        generateSmash(6 + Math.floor(Math.random() * 12));
+      }
+      for (let i = 0; i < 200; i++) {
+        generateSmash(5 + Math.floor(Math.random() * 12));
+      }
+      for (let i = 0; i < 200; i++) {
+        generateSmash(4 + Math.floor(Math.random() * 12));
+      }
+    </script>
+  </body>
+</html>
