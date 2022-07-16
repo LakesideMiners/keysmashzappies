@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <body>
+    <p id="myRandText">a</p>
     <script>
       // Original code in C# by @HOGGARB
       function generateSmash(length) {
@@ -82,18 +83,18 @@
           keys.push(result.slice(-2).charAt(0));
           keys.push(result.slice(-3).charAt(0));
         }
-        console.log("smash," + result);
+        document.write("smash," + result + ",,,\n");
       }
-      for (let i = 0; i < 10000; i++) {
+      for (let i = 0; i < 30000; i++) {
         generateSmash(8 + Math.floor(Math.random() * 12));
       }
-      for (let i = 0; i < 10000; i++) {
+      for (let i = 0; i < 30000; i++) {
         generateSmash(7 + Math.floor(Math.random() * 12));
       }
-      for (let i = 0; i < 10000; i++) {
+      for (let i = 0; i < 30000; i++) {
         generateSmash(6 + Math.floor(Math.random() * 12));
       }
-      for (let i = 0; i < 10000; i++) {
+      for (let i = 0; i < 30000; i++) {
         generateSmash(5 + Math.floor(Math.random() * 12));
       }
     </script>
