@@ -2,7 +2,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn import svm
-from joblib import dump, load
+import pickle
+filename = 'finalized_model.sav'
 from sklearnex import patch_sklearn
 patch_sklearn()
 
@@ -24,3 +25,4 @@ print("Done model.fit")
 
 features_test = cv.transform(z_test)
 print(model.score(features_test,y_test))
+pickle.dump(model, open(filename, 'wb'))
