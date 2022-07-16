@@ -11,6 +11,9 @@ where someone told me to make a keysmash sensor that would shock me when I keysm
 this was a joke, why did I actualy decide to do this... 
 help.
 
+
+I need a better dataset as well, that or the algthoerm im using isnt right for this.
+
 note that if you get 
 ```ValueError: np.nan is an invalid document, expected byte or unicode string.```
 when running train.py
