@@ -1,5 +1,5 @@
 my READMEs are not normaly like this, just an fyi, also I still need to get spellcheck installed on my IDE
-as of right now, this can't tell if someone has keysmashed or not. it also can't give zappies, i wont be able to test that till I get my PiShock either, but the PiShock api is straight forward, so yee
+as of right now, this can't tell if someone has keysmashed or not. it also can't give zappies, i wont be able to test that till I get my PiShock either, but the PiShock api seems to be stright forward
 
 I have stuff from oxford 5000, corncobs misspelling list, 
 keysmashes were made from https://github.com/galenguyer/galenguyer.github.io.v1/blob/7bac2fa62bf89dd97e4321faa745bf3fd2a08c06/keysmash.html
@@ -13,6 +13,9 @@ help.
 
 
 I need a better dataset as well, that or the algthoerm im using isnt right for this.
+
+# IGNORE ALL BELOW FOR  NOW! THIS IS THE KERAS BRANCH! BASED ON https://towardsdatascience.com/character-level-cnn-with-keras-50391c3adf33
+
 
 note that if you get 
 ```ValueError: np.nan is an invalid document, expected byte or unicode string.```
@@ -40,3 +43,4 @@ null
 ```
 
 ```notsmash,null,,,``` would cause an error but ```notsmash,nulled``` would not
+
