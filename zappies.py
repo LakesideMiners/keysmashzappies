@@ -4,8 +4,35 @@
 
 
 
-def zap(dur, intensity):
+def zap(duration, intensity):
+    """Zaps the PiShock for a given length and intensity
+
+    Args:
+        duration (int): an intger between 1 and 15
+        intensity (int): an intger between 1 and 100
     """
-    This function will zap the PiShock with a given intensity and duration
+    return
+
+def vibrate(duration, intensity):
+    """_summary_
+
+    Args:
+        duration (_type_): _description_
+        intensity (_type_): _description_
+    """
+    return
+
+
+def beep(duration):
+    """
+    This function will beep the PiShock with a given duration
+    """
+    return
+
+
+
+def statushandler(status_string):
+    """
+    This function will handle the PiShocks API repsonses as they all are 200 even on errors.
     """
     return
