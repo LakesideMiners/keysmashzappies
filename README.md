@@ -1,5 +1,5 @@
-
-
+# DO NOT USE THE SHOCKER ON YOUR NECK! BEST TO STAY BELOW THE WAIST!
+## the current quality of the datatset and model is not good. This project is not yet ready for use
 this came out of a converstion in the [PiShock (18+)](https://pishock.com) Discord, 
 
 where someone told me to make a keysmash sensor that would shock me when I keysmash.
@@ -12,4 +12,11 @@ help.
 
 
 ```train.py``` and ```build_dataset.py``` are slightly modfied from  https://mobile.twitter.com/hexcubic stuff
-```keysmashgen.html``` is modifed from https://github.com/galenguyer/galenguyer.github.io.v1/blob/7bac2fa62bf89dd97e4321faa745bf3fd2a08c06/keysmash.html
+
+Keysmashes are/will be from me asking for keysmashes in chats.
+
+## TODO
+- [ ] get better datatset
+- [ ] make readme not bad
+- [ ] create libary for PiShock
+- [ ] work on methdo of getting realtime input

@@ -12,7 +12,7 @@ negative = []
 
 CHARS = []
 
-with open("./tools/keysmashfull.txt") as f:
+with open("./data/letmesmash.txt") as f:
     for line in f:
         line = line.strip().lower()
         if not line:

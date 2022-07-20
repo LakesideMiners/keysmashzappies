@@ -22,15 +22,12 @@ from itertools import combinations
 from tqdm import tqdm
 
 
-
-
 # The path to put the CSV files, these wont exist till after the code is ran
 data_train_loc_csv = "./data/train.csv"
 data_test_loc_csv = "./data/test.csv"
 
 # Where to save the models files. this is where the "model.h5" and "tokenizer.pickle" files go. SHOULD END WITH A "/"
 model_sav_loc = "./model/"
-
 
 
 MAX_LEN = 96
@@ -46,12 +43,7 @@ tk.fit_on_texts(train_texts)
 
 train_sequences = tk.texts_to_sequences(train_texts)
 test_texts = tk.texts_to_sequences(test_texts)
-f = open("./scratchpads/temp/uwu", "w")
-f.write(str(train_sequences))
-f.close()
-f = open("./scratchpads/temp/uwutest", "w")
-f.write(str(test_texts))
-f.close()
+
 # Padding
 train_data = pad_sequences(train_sequences, maxlen=MAX_LEN, padding='post')
 test_data = pad_sequences(test_texts, maxlen=MAX_LEN, padding='post')
@@ -60,8 +52,10 @@ test_data = pad_sequences(test_texts, maxlen=MAX_LEN, padding='post')
 train_data = np.array(train_data, dtype='float32')
 test_data = np.array(test_data, dtype='float32')
 
-train_classes = [1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_train["label"].values]
-test_classes = [1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_test["label"].values]
+train_classes = [
+    1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_train["label"].values]
+test_classes = [
+    1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_test["label"].values]
 
 train_classes = to_categorical(train_classes)
 test_classes = to_categorical(test_classes)
@@ -111,7 +105,8 @@ def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=10):
     predictions = Dense(num_of_classes, activation='softmax')(x)
 
     model = Model(inputs=inputs, outputs=predictions)
-    model.compile(optimizer=optimizer, loss=loss, metrics=['accuracy'])  # Adam, categorical_crossentropy
+    model.compile(optimizer=optimizer, loss=loss, metrics=[
+                  'accuracy'])  # Adam, categorical_crossentropy
 
     indices = np.arange(train_data.shape[0])
 
@@ -122,10 +117,10 @@ def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=10):
     y_test = test_classes
 
     hist = model.fit(x_train, y_train,
-              validation_data=(x_test, y_test),
-              batch_size=64,
-              epochs=epochs,
-              verbose=0)
+                     validation_data=(x_test, y_test),
+                     batch_size=64,
+                     epochs=epochs,
+                     verbose=0)
 
     return hist, model
 
@@ -134,12 +129,12 @@ num_layers = [5]
 
 layer_params = {
     "filter_num": [128, 256, 512],
-    "filter_size": [3,5,7],
+    "filter_size": [3, 5, 7],
     "pooling_size": [-1, 3],
 }
 
 fc_params = {
-    "num_layers": [1,2],
+    "num_layers": [1, 2],
     "layer_size": [64, 128]
 }
 
@@ -151,21 +146,25 @@ for n in num_layers:
             x["filter_num"], x["filter_size"], x["pooling_size"]
         ] for x in arch])
 
+
 def tune():
     best_acc = 0
     for conv_layers in tqdm(architectures):
         for fc_param in ParameterGrid(fc_params):
             for dropout_p in [0.25, 0.5]:
 
-                fully_connected_layers = [fc_param["layer_size"]] * fc_param["num_layers"]
+                fully_connected_layers = [
+                    fc_param["layer_size"]] * fc_param["num_layers"]
 
-                hist, _ = train_model(conv_layers, fully_connected_layers, dropout_p)
+                hist, _ = train_model(
+                    conv_layers, fully_connected_layers, dropout_p)
                 acc = max(hist.history["val_accuracy"])
 
                 if acc > best_acc:
-                    print(f"conv={conv_layers} fc={fully_connected_layers}, d={dropout_p} ACC={acc}")
+                    print(
+                        f"conv={conv_layers} fc={fully_connected_layers}, d={dropout_p} ACC={acc}")
                     best_acc = acc
-#tune()
+# tune()
 
 
 hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25)
@@ -177,5 +176,3 @@ model.save(model_sav_loc + 'model.h5')
 
 with open(model_sav_loc + 'tokenizer.pickle', 'wb') as handle:
     pickle.dump(tk, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-
