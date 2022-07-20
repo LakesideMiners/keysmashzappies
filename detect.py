@@ -22,11 +22,20 @@ with open(model_sav_loc + 'tokenizer.pickle', 'rb') as handle:
 
 
 
-txt = ';;;;;;;;;;;'
-seq = tk.texts_to_sequences([txt])
-padded = pad_sequences(seq, maxlen=96)
-pred = model.predict(padded)
-print(pred)
 
 
 
+
+while True:
+    txt = input("Enter text: ")
+    if txt != "exit":
+        seq = tk.texts_to_sequences([txt])
+        padded = pad_sequences(seq, maxlen=96)
+        pred = model.predict(padded)
+        print(pred)
+    else:
+        stop = True
+        print("Exiting...")
+        break
+
+print("Done")
