@@ -12,7 +12,7 @@ negative = []
 
 CHARS = []
 
-with open("./data/letmesmash.txt") as f:
+with open("letmesmash.txt") as f:
     for line in f:
         line = line.strip().lower()
         if not line:
@@ -45,8 +45,8 @@ df_train, df_test = train_test_split(df, test_size=0.2, random_state=123)
 df_test.head(10)
 
 
-df_train.to_csv("./data/train.csv", index=False)
-df_test.to_csv("./data/test.csv", index=False)
+df_train.to_csv("train.csv", index=False)
+df_test.to_csv("test.csv", index=False)
 
 
 print("done")

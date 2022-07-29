@@ -3,11 +3,36 @@ import numpy as np
 import json
 import random
 import pickle
+import os
 import tensorflow as tf
 
 from keras.models import Model
 from keras.models import load_model
 from keras_preprocessing.sequence import pad_sequences
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
+
+
+def set_tf_log_level(level: int):
+    try:
+        if level == 0:
+            os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
+            print("Supressing NOTHING from TF!")
+        elif level == 1:
+            os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+            print("Supressing INFO messages from TF!")
+        elif level == 2:
+            os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+            print("Supressing INFO and WARNING messages form TF!")
+        elif level == 3:
+            os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+            print("Supressing INFO, WARNING, AND ERROR messages from TF! You better know what you are doing!")
+        else:
+            os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
+            print('Somthing went wrong with setting the log level! Defualting to 0!')
+    except:
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
+        print('Somthing went wrong with setting the log level! Defualting to 0!')
+
 
 # Should be the same as in train.py SHOULD END IN "/"
 # The files in this directory should be "model.h5" and "tokenizer.pickle"
@@ -25,7 +50,7 @@ with open(model_sav_loc + 'tokenizer.pickle', 'rb') as handle:
 
 
 
-
+set_tf_log_level(2)
 while True:
     txt = input("Enter text: ")
     if txt != "exit":
