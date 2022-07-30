@@ -1,3 +1,5 @@
+from ast import comprehension
+from dataclasses import replace
 from lib2to3.pgen2 import token
 import numpy as np
 import json
@@ -33,9 +35,9 @@ def set_tf_log_level(level: int):
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
         print('Somthing went wrong with setting the log level! Defualting to 0!')
 
-
 # Should be the same as in train.py SHOULD END IN "/"
 # The files in this directory should be "model.h5" and "tokenizer.pickle"
+
 model_sav_loc = './model/'
 
 
@@ -46,26 +48,35 @@ with open(model_sav_loc + 'tokenizer.pickle', 'rb') as handle:
     tk = pickle.load(handle)
 
 
-
-
-
-
 set_tf_log_level(2)
+
+# Unfucks the output
+
 def unfuck(input):
-    predstr = str(input) # list to string
-    predstriped = re.sub(r"[\[\]]",'',predstr) #remove the brackets
-    predlist = predstriped.split(" ") # get it back into a list
-    print(predlist)
-    predlist.remove(predlist[2]) # Drop the 2 item(the 3 if you start from 1)
-    print(predlist) #print
+    unfucked = input.tolist()
+    unfucked = str(unfucked)
+    unfucked = unfucked.replace("[","").replace("]","").replace(" ","")
+    unfucked = unfucked.split(",")
+    print(unfucked)
+    return unfucked
     
+def compare(input1, input2):
+    if input1 > input2:
+        #print("Input 1 is bigger!")
+        return 1
+    else:
+        return 2
 while True:
     txt = input("Enter text: ")
     if txt != "exit":
         seq = tk.texts_to_sequences([txt])
         padded = pad_sequences(seq, maxlen=96)
         prediction = model.predict(padded)
-        process_result(prediction)
+        unfucked = unfuck(prediction)
+        print("Val 1: " + unfucked[0])
+        print("Val 2: " + unfucked[1])
+        gay = compare(unfucked[0], unfucked[1])
+        print(gay)
     else:
         stop = True
         print("Exiting...")
