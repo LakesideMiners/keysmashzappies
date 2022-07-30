@@ -5,7 +5,7 @@ import random
 import pickle
 import os
 import tensorflow as tf
-
+import re
 from keras.models import Model
 from keras.models import load_model
 from keras_preprocessing.sequence import pad_sequences
@@ -51,16 +51,25 @@ with open(model_sav_loc + 'tokenizer.pickle', 'rb') as handle:
 
 
 set_tf_log_level(2)
+def unfuck(input):
+    predstr = str(input) # list to string
+    predstriped = re.sub(r"[\[\]]",'',predstr) #remove the brackets
+    predlist = predstriped.split(" ") # get it back into a list
+    print(predlist)
+    predlist.remove(predlist[2]) # Drop the 2 item(the 3 if you start from 1)
+    print(predlist) #print
+    
 while True:
     txt = input("Enter text: ")
     if txt != "exit":
         seq = tk.texts_to_sequences([txt])
         padded = pad_sequences(seq, maxlen=96)
-        pred = model.predict(padded)
-        print(pred)
+        prediction = model.predict(padded)
+        process_result(prediction)
     else:
         stop = True
         print("Exiting...")
         break
+
 
 print("Done")
