@@ -1,4 +1,3 @@
-
 from xml.etree.ElementInclude import DEFAULT_MAX_INCLUSION_DEPTH
 import pandas as pd
 import numpy as np
@@ -17,19 +16,28 @@ from keras_preprocessing.sequence import pad_sequences
 from keras.layers import Input, Embedding, Activation, Flatten, Dense
 from keras.layers import Conv1D, MaxPooling1D, Dropout
 from keras.models import Model
-
+from keras.callbacks import EarlyStopping
 from sklearn.model_selection import ParameterGrid
 from itertools import combinations
 from tqdm import tqdm
 
+early_stopping = EarlyStopping()
 
 # The path to put the CSV files, these wont exist till after the code is ran
 data_train_loc_csv = "./data/train.csv"
 data_test_loc_csv = "./data/test.csv"
 
-# Where to save the models files. this is where the "model.h5" and "tokenizer.pickle" files go. SHOULD END WITH A "/"
+# Where to save the models files. this is where thfdfdafe "model.h5" and "tokenizer.pickle" files go. SHOULD END WITH A "/"
 model_sav_loc = "./model/"
-
+#Checkpointing
+checkpoint_filepath = model_sav_loc + 'check.h5'
+mc = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
+                                        save_weights_only=False,
+                                        monitor='val_accuracy',
+                                        mode='max',
+                                        save_best_only=True)
+# Early Stopping
+ec = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=200)
 
 MAX_LEN = 96
 
@@ -54,25 +62,25 @@ train_data = np.array(train_data, dtype='float32')
 test_data = np.array(test_data, dtype='float32')
 
 train_classes = [
-    1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_train["label"].values]
+    1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_train["label"].values
+]
 test_classes = [
-    1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_test["label"].values]
+    1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_test["label"].values
+]
 
 train_classes = to_categorical(train_classes)
 test_classes = to_categorical(test_classes)
 
-
 test_data.shape
-
 
 VOCAB_SIZE = len(tk.word_index)
 
 num_of_classes = 2
 optimizer = 'adam'
-loss = 'categorical_crossentropy'
+loss = 'binary_crossentropy'
 
 
-def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=10):
+def train_model(conv_layers, fully_connected_layers, dropout_p, epochs):
     embedding_weights = []
     embedding_weights.append(np.zeros(VOCAB_SIZE))
 
@@ -88,7 +96,7 @@ def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=10):
                                 input_length=MAX_LEN,
                                 weights=[embedding_weights])
 
-    inputs = Input(shape=(MAX_LEN,), name='input', dtype='int32')
+    inputs = Input(shape=(MAX_LEN, ), name='input', dtype='int32')
 
     x = embedding_layer(inputs)
 
@@ -106,8 +114,9 @@ def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=10):
     predictions = Dense(num_of_classes, activation='softmax')(x)
 
     model = Model(inputs=inputs, outputs=predictions)
-    model.compile(optimizer=optimizer, loss=loss, metrics=[
-                  'accuracy'])  # Adam, categorical_crossentropy
+    model.compile(optimizer=optimizer, loss=loss,
+                  metrics=['accuracy'])  # Adam, categorical_crossentropy
+    print(model.summary())
 
     indices = np.arange(train_data.shape[0])
 
@@ -117,11 +126,13 @@ def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=10):
     x_test = test_data
     y_test = test_classes
 
-    hist = model.fit(x_train, y_train,
+    hist = model.fit(x_train,
+                     y_train,
                      validation_data=(x_test, y_test),
                      batch_size=64,
                      epochs=epochs,
-                     verbose=0)
+                     verbose=2,
+                     callbacks=[mc, ec])
 
     return hist, model
 
@@ -134,18 +145,15 @@ layer_params = {
     "pooling_size": [-1, 3],
 }
 
-fc_params = {
-    "num_layers": [1, 2],
-    "layer_size": [64, 128]
-}
+fc_params = {"num_layers": [1, 2], "layer_size": [64, 128]}
 
 layer_combinations = list(ParameterGrid(layer_params))
 architectures = []
 for n in num_layers:
     for arch in combinations(layer_combinations, n):
-        architectures.append([[
-            x["filter_num"], x["filter_size"], x["pooling_size"]
-        ] for x in arch])
+        architectures.append(
+            [[x["filter_num"], x["filter_size"], x["pooling_size"]]
+             for x in arch])
 
 
 def tune():
@@ -154,26 +162,29 @@ def tune():
         for fc_param in ParameterGrid(fc_params):
             for dropout_p in [0.25, 0.5]:
 
-                fully_connected_layers = [
-                    fc_param["layer_size"]] * fc_param["num_layers"]
+                fully_connected_layers = [fc_param["layer_size"]
+                                          ] * fc_param["num_layers"]
 
-                hist, _ = train_model(
-                    conv_layers, fully_connected_layers, dropout_p)
+                hist, _ = train_model(conv_layers, fully_connected_layers,
+                                      dropout_p)
                 acc = max(hist.history["val_accuracy"])
-
+                print("ACC: " + str(acc) + "    " + "BestAcc: " +
+                      str(best_acc))
                 if acc > best_acc:
+                    print("BETTER ACC!")
                     print(
-                        f"conv={conv_layers} fc={fully_connected_layers}, d={dropout_p} ACC={acc}")
+                        f"conv={conv_layers} fc={fully_connected_layers}, d={dropout_p} ACC={acc}"
+                    )
                     best_acc = acc
-# tune()
 
 
-hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25)
+#hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25)
+#print(hist.history["val_accuracy"])
+hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25, 100)
 print(hist.history["val_accuracy"])
-
-hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25, epochs=9)
-
-model.save(model_sav_loc + 'model.h5')
+print(model.summary())
+#model.save(model_sav_loc + 'model2.h5')
 
 with open(model_sav_loc + 'tokenizer.pickle', 'wb') as handle:
     pickle.dump(tk, handle, protocol=pickle.HIGHEST_PROTOCOL)
+

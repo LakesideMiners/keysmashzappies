@@ -41,7 +41,7 @@ def set_tf_log_level(level: int):
 model_sav_loc = './model/'
 
 
-model = tf.keras.models.load_model(model_sav_loc + "model.h5")
+model = tf.keras.models.load_model("model/check.h5")
 
 
 with open(model_sav_loc + 'tokenizer.pickle', 'rb') as handle:
