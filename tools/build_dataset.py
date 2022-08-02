@@ -17,22 +17,25 @@ with open("inputdata/letmesmash.txt") as f:
         line = line.strip().lower()
         if not line:
             continue
-        
+
         positive.append(line)
-        
+
         for c in line:
             CHARS.append(c)
 
+
 def gen_random_seq(length):
-    
+
     s = ""
-    
+
     for c in range(length):
         s += random.choice(CHARS)
     return s
-        
+
+
 for line in positive:
     negative.append(gen_random_seq(len(line)))
+
 
 def insert_ext_data(file):
     with open(file) as data_file:
@@ -41,7 +44,8 @@ def insert_ext_data(file):
             if not line:
                 continue
             negative.append(line)
-            
+
+
 insert_ext_data(extra_data)
 
 df = pd.DataFrame()

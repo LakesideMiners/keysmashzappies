@@ -5,6 +5,7 @@ import json
 import random
 import pickle
 import sklearn
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 from keras.models import Sequential
@@ -23,50 +24,55 @@ from tqdm import tqdm
 
 early_stopping = EarlyStopping()
 
-# The path to put the CSV files, these wont exist till after the code is ran
 data_train_loc_csv = "./data/train.csv"
 data_test_loc_csv = "./data/test.csv"
 
-# Where to save the models files. this is where thfdfdafe "model.h5" and "tokenizer.pickle" files go. SHOULD END WITH A "/"
+# Where to save the models files. this is where the "model.h5" and "tokenizer.pickle" files go. SHOULD END WITH A "/"
 model_sav_loc = "./model/"
-#Checkpointing
-checkpoint_filepath = model_sav_loc + 'check.h5'
-mc = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
-                                        save_weights_only=False,
-                                        monitor='val_accuracy',
-                                        mode='max',
-                                        save_best_only=True)
-# Early Stopping
-ec = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=200)
+# Checkpointing
+checkpoint_filepath = model_sav_loc + "check.h5"
 
+# Max Lengith
 MAX_LEN = 96
+NUM_EPOCHS = 50
+# Callbacks
+# Checkpointing also only save the best one
+mc = tf.keras.callbacks.ModelCheckpoint(
+    filepath=checkpoint_filepath,
+    save_weights_only=False,
+    monitor="val_accuracy",
+    mode="max",
+    save_best_only=True,
+)
+# Early Stopping
+ec = EarlyStopping(monitor="val_loss", mode="min", verbose=1, patience=200)
 
+
+# Create Dataframes
 df_train = pd.read_csv(data_train_loc_csv)
 df_test = pd.read_csv(data_test_loc_csv)
 
+# Create Texts
 train_texts = df_train["text"]
 test_texts = df_test["text"]
 
-tk = Tokenizer(num_words=None, char_level=True, oov_token='UNK')
+# Tokenizer
+tk = Tokenizer(num_words=None, char_level=True, oov_token="UNK")
 tk.fit_on_texts(train_texts)
 
 train_sequences = tk.texts_to_sequences(train_texts)
 test_texts = tk.texts_to_sequences(test_texts)
 
 # Padding
-train_data = pad_sequences(train_sequences, maxlen=MAX_LEN, padding='post')
-test_data = pad_sequences(test_texts, maxlen=MAX_LEN, padding='post')
+train_data = pad_sequences(train_sequences, maxlen=MAX_LEN, padding="post")
+test_data = pad_sequences(test_texts, maxlen=MAX_LEN, padding="post")
 
 # Convert to numpy array
-train_data = np.array(train_data, dtype='float32')
-test_data = np.array(test_data, dtype='float32')
+train_data = np.array(train_data, dtype="float32")
+test_data = np.array(test_data, dtype="float32")
 
-train_classes = [
-    1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_train["label"].values
-]
-test_classes = [
-    1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_test["label"].values
-]
+train_classes = [1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_train["label"].values]
+test_classes = [1 if l == "BOTTOM_KEY_SMASH" else 0 for l in df_test["label"].values]
 
 train_classes = to_categorical(train_classes)
 test_classes = to_categorical(test_classes)
@@ -76,8 +82,8 @@ test_data.shape
 VOCAB_SIZE = len(tk.word_index)
 
 num_of_classes = 2
-optimizer = 'adam'
-loss = 'binary_crossentropy'
+optimizer = "adam"
+loss = "binary_crossentropy"
 
 
 def train_model(conv_layers, fully_connected_layers, dropout_p, epochs):
@@ -91,31 +97,31 @@ def train_model(conv_layers, fully_connected_layers, dropout_p, epochs):
 
     embedding_weights = np.array(embedding_weights)
 
-    embedding_layer = Embedding(VOCAB_SIZE + 1,
-                                VOCAB_SIZE,
-                                input_length=MAX_LEN,
-                                weights=[embedding_weights])
+    embedding_layer = Embedding(
+        VOCAB_SIZE + 1, VOCAB_SIZE, input_length=MAX_LEN, weights=[embedding_weights]
+    )
 
-    inputs = Input(shape=(MAX_LEN, ), name='input', dtype='int32')
+    inputs = Input(shape=(MAX_LEN,), name="input", dtype="int32")
 
     x = embedding_layer(inputs)
 
     for filter_num, filter_size, pooling_size in conv_layers:
-        x = Conv1D(filter_num, filter_size, padding='same')(x)
-        x = Activation('relu')(x)
+        x = Conv1D(filter_num, filter_size, padding="same")(x)
+        x = Activation("relu")(x)
         if pooling_size != -1:
             x = MaxPooling1D(pool_size=pooling_size)(x)
     x = Flatten()(x)
 
     for dense_size in fully_connected_layers:
-        x = Dense(dense_size, activation='relu')(x)
+        x = Dense(dense_size, activation="relu")(x)
         x = Dropout(dropout_p)(x)
 
-    predictions = Dense(num_of_classes, activation='softmax')(x)
+    predictions = Dense(num_of_classes, activation="softmax")(x)
 
     model = Model(inputs=inputs, outputs=predictions)
-    model.compile(optimizer=optimizer, loss=loss,
-                  metrics=['accuracy'])  # Adam, categorical_crossentropy
+    model.compile(
+        optimizer=optimizer, loss=loss, metrics=["accuracy"]
+    )  # Adam, categorical_crossentropy
     print(model.summary())
 
     indices = np.arange(train_data.shape[0])
@@ -126,13 +132,15 @@ def train_model(conv_layers, fully_connected_layers, dropout_p, epochs):
     x_test = test_data
     y_test = test_classes
 
-    hist = model.fit(x_train,
-                     y_train,
-                     validation_data=(x_test, y_test),
-                     batch_size=64,
-                     epochs=epochs,
-                     verbose=2,
-                     callbacks=[mc, ec])
+    hist = model.fit(
+        x_train,
+        y_train,
+        validation_data=(x_test, y_test),
+        batch_size=64,
+        epochs=epochs,
+        verbose=2,
+        callbacks=[mc, ec],
+    )
 
     return hist, model
 
@@ -152,8 +160,8 @@ architectures = []
 for n in num_layers:
     for arch in combinations(layer_combinations, n):
         architectures.append(
-            [[x["filter_num"], x["filter_size"], x["pooling_size"]]
-             for x in arch])
+            [[x["filter_num"], x["filter_size"], x["pooling_size"]] for x in arch]
+        )
 
 
 def tune():
@@ -162,14 +170,13 @@ def tune():
         for fc_param in ParameterGrid(fc_params):
             for dropout_p in [0.25, 0.5]:
 
-                fully_connected_layers = [fc_param["layer_size"]
-                                          ] * fc_param["num_layers"]
+                fully_connected_layers = [fc_param["layer_size"]] * fc_param[
+                    "num_layers"
+                ]
 
-                hist, _ = train_model(conv_layers, fully_connected_layers,
-                                      dropout_p)
+                hist, _ = train_model(conv_layers, fully_connected_layers, dropout_p)
                 acc = max(hist.history["val_accuracy"])
-                print("ACC: " + str(acc) + "    " + "BestAcc: " +
-                      str(best_acc))
+                print("ACC: " + str(acc) + "    " + "BestAcc: " + str(best_acc))
                 if acc > best_acc:
                     print("BETTER ACC!")
                     print(
@@ -178,13 +185,27 @@ def tune():
                     best_acc = acc
 
 
-#hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25)
-#print(hist.history["val_accuracy"])
-hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25, 100)
+# hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25)
+# print(hist.history["val_accuracy"])
+hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25, NUM_EPOCHS)
 print(hist.history["val_accuracy"])
 print(model.summary())
-#model.save(model_sav_loc + 'model2.h5')
+# model.save(model_sav_loc + 'model2.h5')
 
-with open(model_sav_loc + 'tokenizer.pickle', 'wb') as handle:
+with open(model_sav_loc + "tokenizer.pickle", "wb") as handle:
     pickle.dump(tk, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+def plot_metric(history, metric):
+    train_metrics = history.history[metric]
+    val_metrics = history.history['val_'+metric]
+    epochs = range(1, len(train_metrics) + 1)
+    plt.plot(epochs, train_metrics)
+    plt.plot(epochs, val_metrics)
+    plt.title('Training and validation '+ metric)
+    plt.xlabel("Epochs")
+    plt.ylabel(metric)
+    plt.legend(["train_"+metric, 'val_'+metric])
+    plt.savefig('name')
+
+
+plot_metric(hist, 'accuracy')
