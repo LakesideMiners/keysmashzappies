@@ -1,7 +1,6 @@
-## this file will be the one that will do the keywatching and the ~Z A P P I E S~  
-##nothing works yet though, as I dont have a PiShock to test it with yet, 
+## this file will be the one that will do the keywatching and the ~Z A P P I E S~
+##nothing works yet though, as I dont have a PiShock to test it with yet,
 ## but I'm looking at the api docs right now to make a few functions to make it easer to use
-
 
 
 def zap(duration, intensity):
@@ -12,6 +11,7 @@ def zap(duration, intensity):
         intensity (int): an intger between 1 and 100
     """
     return
+
 
 def vibrate(duration, intensity):
     """_summary_
@@ -28,7 +28,6 @@ def beep(duration):
     This function will beep the PiShock with a given duration
     """
     return
-
 
 
 def statushandler(status_string):
