@@ -35,3 +35,5 @@ def statushandler(status_string):
     This function will handle the PiShocks API repsonses as they all are 200 even on errors.
     """
     return
+
+

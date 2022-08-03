@@ -13,7 +13,6 @@ from keras.layers import Dense
 from keras.utils.np_utils import to_categorical
 from keras.preprocessing.text import Tokenizer
 from keras_preprocessing.sequence import pad_sequences
-
 from keras.layers import Input, Embedding, Activation, Flatten, Dense
 from keras.layers import Conv1D, MaxPooling1D, Dropout
 from keras.models import Model
@@ -24,19 +23,12 @@ from tqdm import tqdm
 
 early_stopping = EarlyStopping()
 
-data_train_loc_csv = "./data/train.csv"
-data_test_loc_csv = "./data/test.csv"
-
+data_test_loc_csv = "./processeddata/test.csv"
+data_train_loc_csv = "./processeddata/train.csv"
 # Where to save the models files. this is where the "model.h5" and "tokenizer.pickle" files go. SHOULD END WITH A "/"
 model_sav_loc = "./model/"
 # Checkpointing
 checkpoint_filepath = model_sav_loc + "check.h5"
-
-# Max Lengith
-MAX_LEN = 96
-NUM_EPOCHS = 50
-# Callbacks
-# Checkpointing also only save the best one
 mc = tf.keras.callbacks.ModelCheckpoint(
     filepath=checkpoint_filepath,
     save_weights_only=False,
@@ -45,7 +37,15 @@ mc = tf.keras.callbacks.ModelCheckpoint(
     save_best_only=True,
 )
 # Early Stopping
-ec = EarlyStopping(monitor="val_loss", mode="min", verbose=1, patience=200)
+ec = EarlyStopping(
+    monitor="val_accuracy", mode="auto", verbose=1, patience=8, min_delta=0.001
+)
+
+# Max Lengith
+MAX_LEN = 96
+NUM_EPOCHS = 50
+# Callbacks
+# Checkpointing also only save the best one
 
 
 # Create Dataframes
@@ -195,17 +195,18 @@ print(model.summary())
 with open(model_sav_loc + "tokenizer.pickle", "wb") as handle:
     pickle.dump(tk, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+
 def plot_metric(history, metric):
     train_metrics = history.history[metric]
-    val_metrics = history.history['val_'+metric]
+    val_metrics = history.history["val_" + metric]
     epochs = range(1, len(train_metrics) + 1)
     plt.plot(epochs, train_metrics)
     plt.plot(epochs, val_metrics)
-    plt.title('Training and validation '+ metric)
+    plt.title("Training and validation " + metric)
     plt.xlabel("Epochs")
     plt.ylabel(metric)
-    plt.legend(["train_"+metric, 'val_'+metric])
-    plt.savefig('name')
+    plt.legend(["train_" + metric, "val_" + metric])
+    plt.savefig("name")
 
 
-plot_metric(hist, 'accuracy')
+plot_metric(hist, "accuracy")

@@ -4,7 +4,7 @@ from collections import Counter
 
 from sklearn.model_selection import train_test_split
 
-extra_data = "inputdata/dictionary.txt"
+extra_data = "./rawdata/1000.txt"
 random.seed(123)
 
 positive = []
@@ -12,7 +12,7 @@ negative = []
 
 CHARS = []
 
-with open("inputdata/letmesmash.txt") as f:
+with open("rawdata/letmesmash.txt") as f:
     for line in f:
         line = line.strip().lower()
         if not line:
@@ -33,8 +33,8 @@ def gen_random_seq(length):
     return s
 
 
-for line in positive:
-    negative.append(gen_random_seq(len(line)))
+#for line in positive:
+#    negative.append(gen_random_seq(len(line)))
 
 
 def insert_ext_data(file):
@@ -58,8 +58,8 @@ df_train, df_test = train_test_split(df, test_size=0.2, random_state=123)
 df_test.head(10)
 
 
-df_train.to_csv("data/train.csv", index=False)
-df_test.to_csv("data/test.csv", index=False)
+df_train.to_csv("processeddata/train.csv", index=False)
+df_test.to_csv("processeddata/test.csv", index=False)
 
 
 print("done")
