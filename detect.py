@@ -66,7 +66,7 @@ def unfuck(input):
     return unfucked
 
 
-def compare(input1, input2):
+def bigger(input1, input2):
     if input1 > input2:
         # print("Input 1 is bigger!")
         return 1
@@ -83,7 +83,7 @@ while True:
         unfucked = unfuck(prediction)
         print("Val 1: " + unfucked[0])
         print("Val 2: " + unfucked[1])
-        gay = compare(unfucked[0], unfucked[1])
+        gay = bigger(unfucked[0], unfucked[1])
         print(gay)
     else:
         stop = True
