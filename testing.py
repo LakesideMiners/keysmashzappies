@@ -65,7 +65,6 @@ def unfuck(input):
     print(unfucked)
     return unfucked
 
-
 def bigger(input1, input2):
     if input1 > input2:
         # print("Input 1 is bigger!")

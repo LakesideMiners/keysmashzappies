@@ -1,39 +1,63 @@
-## this file will be the one that will do the keywatching and the ~Z A P P I E S~
-##nothing works yet though, as I dont have a PiShock to test it with yet,
-## but I'm looking at the api docs right now to make a few functions to make it easer to use
+import pickle
+import configparser
+import tensorflow as tf
+from keras_preprocessing.sequence import pad_sequences
+
+model_sav_loc = "./model/"
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+# Auth
+username = config['auth']['username']
+apikey = config['auth']['apikey']
+sharecode = config['auth']['sharecode']
+name = config['auth']['name']
+
+# Settings
+mode = config['settings']['mode']
+duration = config['settings']['duration']
+intensity = config['settings']['intensity']
+
+# Warning Settings
+warning = config['warning']['enable']
+randomenable = config['warning']['random']
+minwait = config['warning']['minwait']
+maxwait = config['warning']['maxwait']
+
+# Load the model and the tokenizer
+model = tf.keras.models.load_model("model/check.h5")
+with open(model_sav_loc + "tokenizer.pickle", "rb") as handle:
+    tk = pickle.load(handle)
 
 
-def zap(duration, intensity):
-    """Zaps the PiShock for a given length and intensity
-
-    Args:
-        duration (int): an intger between 1 and 15
-        intensity (int): an intger between 1 and 100
-    """
-    return
-
-
-def vibrate(duration, intensity):
-    """_summary_
-
-    Args:
-        duration (_type_): _description_
-        intensity (_type_): _description_
-    """
-    return
+# Define some functions to help with processing
+def bigger(input1, input2):
+    if input1 > input2:
+        # print("Input 1 is bigger!")
+        return 1
+    else:
+        return 2
 
 
-def beep(duration):
-    """
-    This function will beep the PiShock with a given duration
-    """
-    return
+def unfuck(input):
+    unfucked = input.tolist()
+    unfucked = str(unfucked)
+    unfucked = unfucked.replace("[", "").replace("]", "").replace(" ", "")
+    unfucked = unfucked.split(",")
+    return unfucked
 
 
-def statushandler(status_string):
-    """
-    This function will handle the PiShocks API repsonses as they all are 200 even on errors.
-    """
-    return
+def process(input):
+    seq = tk.texts_to_sequences([input])
+    padded = pad_sequences(seq, maxlen=96)
+    prediction = model.predict(padded)
+    unfucked = unfuck(prediction)
+    bottom = unfucked[0]
+    notbottom = unfucked[1]
+    bigger_value = bigger(unfucked[0], unfucked[1])
+    return bottom, notbottom, bigger_value
+
+
+def 
 
 
