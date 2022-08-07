@@ -5,11 +5,12 @@ import tensorflow as tf
 from keras_preprocessing.sequence import pad_sequences
 from pynput import keyboard
 from threading import Timer, active_count
-from piShock import piShock
+from piShockWrapper import piShock
 
 import numpy as np
 global keys_pressed
-
+global sleep_time
+sleep_time = 5
 keys_pressed = []
 global num_keys_pressed
 num_keys_pressed = 0
@@ -120,7 +121,6 @@ def on_release(key):
 
 
 def create_listener():
-    sleep(5)
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
 
@@ -135,3 +135,4 @@ def zap():
 
 while True:
     create_listener()
+    sleep(sleep_time)
