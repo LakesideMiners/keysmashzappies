@@ -1,0 +1,3 @@
+[submodule "piShockWrapper"]
+	path = piShockWrapper
+	url = https://github.com/Faust-d/piShockWrapper.git
