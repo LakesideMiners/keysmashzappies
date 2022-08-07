@@ -13,6 +13,7 @@ from keras.models import load_model
 from keras_preprocessing.sequence import pad_sequences
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "0"
+# 2 = bottom keysmash uwu sussy baka
 
 
 def set_tf_log_level(level: int):
@@ -44,7 +45,7 @@ def set_tf_log_level(level: int):
 
 model_sav_loc = "./model/"
 
-
+ 
 model = tf.keras.models.load_model("model/check.h5")
 
 
@@ -57,7 +58,9 @@ set_tf_log_level(2)
 # Unfucks the output
 
 
-def unfuck(input):
+
+def unfuck_predict(input):
+    #print(type(input))
     unfucked = input.tolist()
     unfucked = str(unfucked)
     unfucked = unfucked.replace("[", "").replace("]", "").replace(" ", "")
@@ -65,25 +68,44 @@ def unfuck(input):
     print(unfucked)
     return unfucked
 
+
 def bigger(input1, input2):
     if input1 > input2:
         # print("Input 1 is bigger!")
-        return 1
+        return ""
     else:
         return 2
+
+def predict_smash(input: str):
+    """predict_smash _summary_
+
+    Args:
+        input (str): the text to predict on
+
+    Returns:
+        list: returns a tuple 
+    """    
+    seq = tk.texts_to_sequences([input])
+    padded = pad_sequences(seq, maxlen=96)
+    prediction = model.predict(padded)
+    unfucked = unfuck_predict(prediction)
+    bottom = unfucked[0]
+    notbottom = unfucked[1]
+    bigger_value = bigger(unfucked[0], unfucked[1])
+    return unfucked, bottom, notbottom, bigger_value
 
 
 while True:
     txt = input("Enter text: ")
     if txt != "exit":
-        seq = tk.texts_to_sequences([txt])
-        padded = pad_sequences(seq, maxlen=96)
-        prediction = model.predict(padded)
-        unfucked = unfuck(prediction)
-        print("Val 1: " + unfucked[0])
-        print("Val 2: " + unfucked[1])
-        gay = bigger(unfucked[0], unfucked[1])
-        print(gay)
+        gay = predict_smash(txt)
+
+        print("0 " + str(gay[0]))
+        print("1 " + str(gay[1]))
+        print("2 " + str(gay[2]))
+        print("3 " + str(gay[3]))
+
+
     else:
         stop = True
         print("Exiting...")

@@ -33,8 +33,8 @@ def gen_random_seq(length):
     return s
 
 
-#for line in positive:
-#    negative.append(gen_random_seq(len(line)))
+for line in positive:
+    negative.append(gen_random_seq(len(line)))
 
 
 def insert_ext_data(file):
@@ -46,7 +46,7 @@ def insert_ext_data(file):
             negative.append(line)
 
 
-insert_ext_data(extra_data)
+#insert_ext_data(extra_data)
 
 df = pd.DataFrame()
 df["text"] = positive + negative

@@ -38,12 +38,12 @@ mc = tf.keras.callbacks.ModelCheckpoint(
 )
 # Early Stopping
 ec = EarlyStopping(
-    monitor="val_accuracy", mode="auto", verbose=1, patience=8, min_delta=0.001
+    monitor="val_accuracy", mode="auto", verbose=1, patience=50, min_delta=0.0001
 )
 
 # Max Lengith
 MAX_LEN = 96
-NUM_EPOCHS = 50
+NUM_EPOCHS = 100
 # Callbacks
 # Checkpointing also only save the best one
 

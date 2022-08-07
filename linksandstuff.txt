@@ -1,1 +1,6 @@
 https://towardsdatascience.com/a-practical-introduction-to-early-stopping-in-machine-learning-550ac88bc8fd
+
+https://stackoverflow.com/questions/18352784/how-to-remove-all-of-certain-data-types-from-list
+
+
+
