@@ -13,7 +13,7 @@ help.
 
 ```train.py``` and ```build_dataset.py``` are slightly modfied from  https://mobile.twitter.com/hexcubic stuff
 
-Keysmashes are/will be from me asking for keysmashes in chats.
+Keysmashes are/will be from me asking for keysmashes in chats. as well as the one hex gave me
 
 ## TODO
 - [ ] get better datatset
