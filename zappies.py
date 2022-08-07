@@ -4,9 +4,11 @@ import tensorflow as tf
 from keras_preprocessing.sequence import pad_sequences
 from pynput import keyboard
 from threading import Timer, active_count
-import piShock
+from piShockWrapper import piShock
+
 import numpy as np
 global keys_pressed
+
 keys_pressed = []
 global num_keys_pressed
 num_keys_pressed = 0
@@ -121,7 +123,7 @@ def create_listener():
 
 
 #def shock(username, apikey, sharecode, name, duration, )
-piShock.shock()
+piShock(username, apikey, sharecode, name, duration, intensity, warning).shock()
 
 while True:
     create_listener()
