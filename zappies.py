@@ -1,10 +1,11 @@
 import pickle
 import configparser
+from time import sleep
 import tensorflow as tf
 from keras_preprocessing.sequence import pad_sequences
 from pynput import keyboard
 from threading import Timer, active_count
-from piShockWrapper import piShock
+from piShock import piShock
 
 import numpy as np
 global keys_pressed
@@ -26,14 +27,14 @@ name = config["auth"]["name"]
 
 # Settings
 mode = config["settings"]["mode"]
-duration = config["settings"]["duration"]
-intensity = config["settings"]["intensity"]
+duration = int(config["settings"]["duration"])
+intensity = int(config["settings"]["intensity"])
 
 # Warning Settings
-warning = config["warning"]["enable"]
+warning = int(config["warning"]["warning"])
 randomenable = config["warning"]["random"]
-minwait = config["warning"]["minwait"]
-maxwait = config["warning"]["maxwait"]
+minwait = int(config["warning"]["minwait"])
+maxwait = int(config["warning"]["maxwait"])
 
 # Load the model and the tokenizer
 model = tf.keras.models.load_model("model/check.h5")
@@ -106,6 +107,8 @@ def on_release(key):
     global keys_to_keep
     if num_keys_pressed >= keys_to_keep:
         predict_output = predict_smash(to_string(keys_pressed))
+        if predict_output[3] == 2:
+            zap()
         num_keys_pressed = 0
         print("Done")
         print(keys_pressed)
@@ -117,13 +120,18 @@ def on_release(key):
 
 
 def create_listener():
+    sleep(5)
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
 
 
 
 #def shock(username, apikey, sharecode, name, duration, )
-piShock(username, apikey, sharecode, name, duration, intensity, warning).shock()
+def zap():
+    piShock(username, apikey, sharecode, name, duration, intensity, warning).shock()
+    print("ZAP")
+
+
 
 while True:
     create_listener()

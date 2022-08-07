@@ -25,7 +25,7 @@ early_stopping = EarlyStopping()
 
 data_test_loc_csv = "./processeddata/test.csv"
 data_train_loc_csv = "./processeddata/train.csv"
-# Where to save the models files. this is where the "model.h5" and "tokenizer.pickle" files go. SHOULD END WITH A "/"
+# Where to save the models files. this is where the "check.h5" and "tokenizer.pickle" files go. SHOULD END WITH A "/"
 model_sav_loc = "./model/"
 # Checkpointing
 checkpoint_filepath = model_sav_loc + "check.h5"

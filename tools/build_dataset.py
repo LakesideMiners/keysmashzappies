@@ -1,16 +1,21 @@
 import pandas as pd
 import random
 from collections import Counter
-
+import sys
 from sklearn.model_selection import train_test_split
 
 extra_data = "./rawdata/1000.txt"
-random.seed(123)
+
 
 positive = []
 negative = []
 
 CHARS = []
+
+seed = random.randrange(sys.maxsize)
+random.seed(seed)
+print("Seed was:", seed)
+
 
 with open("rawdata/letmesmash.txt") as f:
     for line in f:
@@ -60,6 +65,8 @@ df_test.head(10)
 
 df_train.to_csv("processeddata/train.csv", index=False)
 df_test.to_csv("processeddata/test.csv", index=False)
+with open('processeddata/seed.txt', "w") as myfile:
+    myfile.write(str(seed))
 
 
 print("done")
