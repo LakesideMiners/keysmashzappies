@@ -10,6 +10,7 @@ from piShockWrapper import piShock
 import numpy as np
 global keys_pressed
 global sleep_time
+
 sleep_time = 5
 keys_pressed = []
 global num_keys_pressed
