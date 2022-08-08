@@ -18,5 +18,4 @@ Keysmashes are/will be from me asking for keysmashes in chats. as well as the on
 ## TODO
 - [ ] get better datatset
 - [ ] make readme not bad
-- [ ] create libary for PiShock
-- [ ] work on methdo of getting realtime input
+- [X] work on getting realtime input
