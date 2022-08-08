@@ -21,29 +21,31 @@ from sklearn.model_selection import ParameterGrid
 from itertools import combinations
 from tqdm import tqdm
 
-early_stopping = EarlyStopping()
+""" early_stopping = EarlyStopping() """
 
 data_test_loc_csv = "./processeddata/test.csv"
 data_train_loc_csv = "./processeddata/train.csv"
 # Where to save the models files. this is where the "check.h5" and "tokenizer.pickle" files go. SHOULD END WITH A "/"
 model_sav_loc = "./model/"
 # Checkpointing
-checkpoint_filepath = model_sav_loc + "check.h5"
+""" checkpoint_filepath = model_sav_loc + "check.h5"
 mc = tf.keras.callbacks.ModelCheckpoint(
     filepath=checkpoint_filepath,
     save_weights_only=False,
-    monitor="val_accuracy",
+    monitor="vec = EarlyStopping(
+    monitor="val_accuracy", mode="auto", verbose=1, patience=50, min_delta=0.0001
+)al_accuracy",
     mode="max",
     save_best_only=True,
-)
+) """
 # Early Stopping
-ec = EarlyStopping(
+""" ec = EarlyStopping(
     monitor="val_accuracy", mode="auto", verbose=1, patience=50, min_delta=0.0001
-)
+) """
 
 # Max Lengith
 MAX_LEN = 10
-NUM_EPOCHS = 15
+NUM_EPOCHS = 5
 # Callbacks
 # Checkpointing also only save the best one
 
@@ -86,7 +88,7 @@ optimizer = "adam"
 loss = "categorical_crossentropy"
 
 
-def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=NUM_EPOCHS):
+def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=10):
     embedding_weights = []
     embedding_weights.append(np.zeros(VOCAB_SIZE))
 
@@ -138,7 +140,7 @@ def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=NUM_EPOCH
         validation_data=(x_test, y_test),
         batch_size=64,
         epochs=epochs,
-        verbose=2,
+        verbose=0,
     )
 
     return hist, model
@@ -180,26 +182,11 @@ tune()
 
 hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25)
 print(hist.history["val_accuracy"])
-hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25, epochs=NUM_EPOCHS)
-print(hist.history["val_accuracy"])
+
+hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25, epochs=9)
+
 print(model.summary())
-# model.save(model_sav_loc + 'model2.h5')
+model.save(model_sav_loc + 'model2.h5')
 
 with open(model_sav_loc + "tokenizer.pickle", "wb") as handle:
     pickle.dump(tk, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-
-def plot_metric(history, metric):
-    train_metrics = history.history[metric]
-    val_metrics = history.history["val_" + metric]
-    epochs = range(1, len(train_metrics) + 1)
-    plt.plot(epochs, train_metrics)
-    plt.plot(epochs, val_metrics)
-    plt.title("Training and validation " + metric)
-    plt.xlabel("Epochs")
-    plt.ylabel(metric)
-    plt.legend(["train_" + metric, "val_" + metric])
-    plt.savefig("name")
-
-
-plot_metric(hist, "accuracy")

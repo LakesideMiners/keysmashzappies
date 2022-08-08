@@ -1,0 +1,19 @@
+None
+  0%|                                                                                                           | 1/8568 [00:25<61:14:20, 25.73s/it]
+Traceback (most recent call last):
+  File "/home/redkitters/projects/python/keysmashzappies/train.py", line 181, in <module>
+    tune()
+  File "/home/redkitters/projects/python/keysmashzappies/train.py", line 175, in tune
+    hist, _ = train_model(conv_layers, fully_connected_layers, dropout_p)
+  File "/home/redkitters/projects/python/keysmashzappies/train.py", line 114, in train_model
+    x = MaxPooling1D(pool_size=pooling_size)(x)
+  File "/home/redkitters/projects/python/keysmashzappies/venv/lib/python3.10/site-packages/keras/utils/traceback_utils.py", line 67, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "/home/redkitters/projects/python/keysmashzappies/venv/lib/python3.10/site-packages/keras/backend.py", line 6106, in pool2d
+    x = tf.compat.v1.nn.max_pool(
+ValueError: Exception encountered when calling layer "max_pooling1d_18" (type MaxPooling1D).
+
+Negative dimension size caused by subtracting  from  for '{{node max_pooling1d_18/MaxPool}} = MaxPool[T=DT_FLOAT, data_format="NHWC", explicit_paddings=[], ksize=[1, 3, 1, 1], padding="VALID", strides=[1, 3, 1, 1]](max_pooling1d_18/ExpandDims)' with input shapes: [?,1,1,128].
+
+Call arguments received by layer "max_pooling1d_18" (type MaxPooling1D):
+  • inputs=tf.Tensor(shape=(None, 1, 128), dtype=float32)
