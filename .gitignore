@@ -5,3 +5,4 @@ beemovie.txt
 .vscode
 config.ini
 /__pycache__
+model/check.h5

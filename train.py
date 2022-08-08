@@ -42,8 +42,8 @@ ec = EarlyStopping(
 )
 
 # Max Lengith
-MAX_LEN = 96
-NUM_EPOCHS = 100
+MAX_LEN = 10
+NUM_EPOCHS = 15
 # Callbacks
 # Checkpointing also only save the best one
 
@@ -83,10 +83,10 @@ VOCAB_SIZE = len(tk.word_index)
 
 num_of_classes = 2
 optimizer = "adam"
-loss = "binary_crossentropy"
+loss = "categorical_crossentropy"
 
 
-def train_model(conv_layers, fully_connected_layers, dropout_p, epochs):
+def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=NUM_EPOCHS):
     embedding_weights = []
     embedding_weights.append(np.zeros(VOCAB_SIZE))
 
@@ -139,7 +139,6 @@ def train_model(conv_layers, fully_connected_layers, dropout_p, epochs):
         batch_size=64,
         epochs=epochs,
         verbose=2,
-        callbacks=[mc, ec],
     )
 
     return hist, model
@@ -163,31 +162,25 @@ for n in num_layers:
             [[x["filter_num"], x["filter_size"], x["pooling_size"]] for x in arch]
         )
 
-
 def tune():
     best_acc = 0
     for conv_layers in tqdm(architectures):
         for fc_param in ParameterGrid(fc_params):
             for dropout_p in [0.25, 0.5]:
 
-                fully_connected_layers = [fc_param["layer_size"]] * fc_param[
-                    "num_layers"
-                ]
+                fully_connected_layers = [fc_param["layer_size"]] * fc_param["num_layers"]
 
                 hist, _ = train_model(conv_layers, fully_connected_layers, dropout_p)
                 acc = max(hist.history["val_accuracy"])
-                print("ACC: " + str(acc) + "    " + "BestAcc: " + str(best_acc))
+
                 if acc > best_acc:
-                    print("BETTER ACC!")
-                    print(
-                        f"conv={conv_layers} fc={fully_connected_layers}, d={dropout_p} ACC={acc}"
-                    )
+                    print(f"conv={conv_layers} fc={fully_connected_layers}, d={dropout_p} ACC={acc}")
                     best_acc = acc
+tune()
 
-
-# hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25)
-# print(hist.history["val_accuracy"])
-hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25, NUM_EPOCHS)
+hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25)
+print(hist.history["val_accuracy"])
+hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25, epochs=NUM_EPOCHS)
 print(hist.history["val_accuracy"])
 print(model.summary())
 # model.save(model_sav_loc + 'model2.h5')
