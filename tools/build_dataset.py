@@ -12,12 +12,12 @@ negative = []
 
 CHARS = []
 
-seed = random.randrange(sys.maxsize)
-random.seed(seed)
-print("Seed was:", seed)
+
+random.seed(123)
 
 
-with open("rawdata/letmesmash.txt") as f:
+
+with open("data/rawdata/letmesmash.txt") as f:
     for line in f:
         line = line.strip().lower()
         if not line:
@@ -63,10 +63,9 @@ df_train, df_test = train_test_split(df, test_size=0.2, random_state=123)
 df_test.head(10)
 
 
-df_train.to_csv("processeddata/train.csv", index=False)
-df_test.to_csv("processeddata/test.csv", index=False)
-with open('processeddata/seed.txt', "w") as myfile:
-    myfile.write(str(seed))
+df_train.to_csv("data/processeddata/train.csv", index=False)
+df_test.to_csv("data/processeddata/test.csv", index=False)
+
 
 
 print("done")

@@ -1,30 +1,26 @@
-from xml.etree.ElementInclude import DEFAULT_MAX_INCLUSION_DEPTH
-import pandas as pd
-import numpy as np
 import json
-import random
 import pickle
-import sklearn
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-import tensorflow as tf
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.utils.np_utils import to_categorical
-from keras.preprocessing.text import Tokenizer
-from keras_preprocessing.sequence import pad_sequences
-from keras.layers import Input, Embedding, Activation, Flatten, Dense
-from keras.layers import Conv1D, MaxPooling1D, Dropout
-from keras.models import Model
-from keras.callbacks import EarlyStopping
-from sklearn.model_selection import ParameterGrid
+import random
 from itertools import combinations
+from xml.etree.ElementInclude import DEFAULT_MAX_INCLUSION_DEPTH
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import sklearn
+import tensorflow as tf
+from keras.callbacks import EarlyStopping
+from keras.layers import Activation, Conv1D, Dense, Dropout, Embedding, Flatten, Input, MaxPooling1D
+from keras.models import Model, Sequential
+from keras.preprocessing.text import Tokenizer
+from keras.utils.np_utils import to_categorical
+from keras_preprocessing.sequence import pad_sequences
+from sklearn.model_selection import ParameterGrid, train_test_split
 from tqdm import tqdm
 
 """ early_stopping = EarlyStopping() """
 
-data_test_loc_csv = "./processeddata/test.csv"
-data_train_loc_csv = "./processeddata/train.csv"
+data_test_loc_csv = "./data/processeddata/test.csv"
+data_train_loc_csv = "./data/processeddata/train.csv"
 # Where to save the models files. this is where the "check.h5" and "tokenizer.pickle" files go. SHOULD END WITH A "/"
 model_sav_loc = "./model/"
 # Checkpointing
@@ -111,7 +107,8 @@ def train_model(conv_layers, fully_connected_layers, dropout_p, epochs=10):
         x = Conv1D(filter_num, filter_size, padding="same")(x)
         x = Activation("relu")(x)
         if pooling_size != -1:
-            x = MaxPooling1D(pool_size=pooling_size)(x)
+            # NOTE ADDED PADDING SAME
+            x = MaxPooling1D(pool_size=pooling_size, padding="same")(x)
     x = Flatten()(x)
 
     for dense_size in fully_connected_layers:
@@ -164,20 +161,27 @@ for n in num_layers:
             [[x["filter_num"], x["filter_size"], x["pooling_size"]] for x in arch]
         )
 
+
 def tune():
     best_acc = 0
     for conv_layers in tqdm(architectures):
         for fc_param in ParameterGrid(fc_params):
             for dropout_p in [0.25, 0.5]:
 
-                fully_connected_layers = [fc_param["layer_size"]] * fc_param["num_layers"]
+                fully_connected_layers = [fc_param["layer_size"]] * fc_param[
+                    "num_layers"
+                ]
 
                 hist, _ = train_model(conv_layers, fully_connected_layers, dropout_p)
                 acc = max(hist.history["val_accuracy"])
 
                 if acc > best_acc:
-                    print(f"conv={conv_layers} fc={fully_connected_layers}, d={dropout_p} ACC={acc}")
+                    print(
+                        f"conv={conv_layers} fc={fully_connected_layers}, d={dropout_p} ACC={acc}"
+                    )
                     best_acc = acc
+
+
 tune()
 
 hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25)
@@ -186,7 +190,7 @@ print(hist.history["val_accuracy"])
 hist, model = train_model([[128, 3, -1], [256, 3, 3]], [64], 0.25, epochs=9)
 
 print(model.summary())
-model.save(model_sav_loc + 'model2.h5')
+model.save(model_sav_loc + "model2.h5")
 
 with open(model_sav_loc + "tokenizer.pickle", "wb") as handle:
     pickle.dump(tk, handle, protocol=pickle.HIGHEST_PROTOCOL)
