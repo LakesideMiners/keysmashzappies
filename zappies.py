@@ -1,13 +1,15 @@
-import pickle
 import configparser
+import pickle
+from threading import Timer, active_count
 from time import sleep
+import random
+import numpy as np
 import tensorflow as tf
 from keras_preprocessing.sequence import pad_sequences
 from pynput import keyboard
-from threading import Timer, active_count
+
 from piShockWrapper import piShock
 
-import numpy as np
 global keys_pressed
 global sleep_time
 
@@ -21,6 +23,7 @@ model_sav_loc = "./model/"
 
 config = configparser.ConfigParser()
 config.read("config.ini")
+
 # Auth
 username = config["auth"]["username"]
 apikey = config["auth"]["apikey"]
@@ -34,9 +37,15 @@ intensity = int(config["settings"]["intensity"])
 
 # Warning Settings
 warning = int(config["warning"]["warning"])
-randomenable = config["warning"]["random"]
-minwait = int(config["warning"]["minwait"])
-maxwait = int(config["warning"]["maxwait"])
+global randomenable 
+randomenable = True
+#randomenable = config["warning"]["random"]
+global minwait
+minwait = 1
+#minwait = int(config["warning"]["minwait"])
+global maxwait
+maxwait = 15
+#maxwait = int(config["warning"]["maxwait"])
 
 # Load the model and the tokenizer
 model = tf.keras.models.load_model("model/check.h5")
@@ -48,9 +57,7 @@ with open(model_sav_loc + "tokenizer.pickle", "rb") as handle:
 
 # Define some functions to help with processing
 def bigger(input1: int, input2: int):
-
     if input1 > input2:
-        # print("Input 1 is bigger!")
         return 1
     else:
         return 2
@@ -125,15 +132,30 @@ def create_listener():
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
 
+def warning_handler() -> int:
+    if randomenable == True:
+        warning = random.randint(minwait, maxwait)
+        return warning
+    elif warning != 0:
+        return warning
 
-
-#def shock(username, apikey, sharecode, name, duration, )
-def zap():
-    piShock(username, apikey, sharecode, name, duration, intensity, warning).shock()
+# Actions
+def zap(username: str, apikey: str, sharecode: str, name: str, duration: int, intensity: int):
+    piShock(username, apikey, sharecode, name, duration, intensity, warning_handler()).shock()
     print("ZAP")
 
+def vibe(username: str, apikey: str, sharecode: str, name: str, duration: int, intensity: int):
+    piShock(username, apikey, sharecode, name, duration, intensity).vibe()
+    print("BUZZ")
 
 
-while True:
+def beep(username: str, apikey: str, sharecode: str, name: str, duration: int):
+    piShock(username, apikey, sharecode, name, duration).beep()
+    print("BEEP")
+
+
+""" while True:
     create_listener()
     sleep(sleep_time)
+ """
+
