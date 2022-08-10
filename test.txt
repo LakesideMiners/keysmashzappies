@@ -1,0 +1,57 @@
+2022-08-10 14:04:27.971321: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-08-10 14:04:27.973447: I tensorflow/core/common_runtime/process_util.cc:146] Creating new thread pool with default inter op setting: 
+Supressing INFO and WARNING messages form TF!
+Enter text: l;dskfl;asdfl;das
+['0.4706527888774872', '0.5293472409248352']
+SMASH
+-------------------
+Enter text: cake
+['0.5933616757392883', '0.40663832426071167']
+NOT SMASH
+-------------------
+Enter text: testing
+['0.46393370628356934', '0.5360662341117859']
+SMASH
+-------------------
+Enter text: test
+['0.5001821517944336', '0.4998178780078888']
+NOT SMASH
+-------------------
+Enter text: cakeing
+['0.6180223822593689', '0.3819776475429535']
+NOT SMASH
+-------------------
+Enter text: haveyoueverheard
+['0.6189522743225098', '0.3810477554798126']
+NOT SMASH
+-------------------
+Enter text: ihavespent50plushoursonthissaveme
+['0.821585476398468', '0.1784144639968872']
+NOT SMASH
+-------------------
+Enter text: dontstopchasingtherush
+['0.6762017011642456', '0.323798269033432']
+NOT SMASH
+-------------------
+Enter text: holdonholdon
+['0.5492476224899292', '0.45075246691703796']
+NOT SMASH
+-------------------
+Enter text: ggggggggggggggggggg
+['0.38206711411476135', '0.6179328560829163']
+SMASH
+-------------------
+Enter text: skdlfjsklshut
+['0.2428002655506134', '0.7571997046470642']
+SMASH
+-------------------
+Enter text: shut
+['0.42834413051605225', '0.571655809879303']
+SMASH
+-------------------
+Enter text: thiswasashutilikecats
+['0.4254527986049652', '0.5745472311973572']
+SMASH
+-------------------
+Enter text: 

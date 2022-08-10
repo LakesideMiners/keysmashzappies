@@ -45,8 +45,8 @@ def set_tf_log_level(level: int):
 
 model_sav_loc = "./model/"
 
- 
-model = tf.keras.models.load_model("model/check.h5")
+
+model = tf.keras.models.load_model("model/model.h5")
 
 
 with open(model_sav_loc + "tokenizer.pickle", "rb") as handle:
@@ -72,7 +72,7 @@ def unfuck_predict(input):
 def bigger(input1, input2):
     if input1 > input2:
         # print("Input 1 is bigger!")
-        return ""
+        return 1
     else:
         return 2
 
@@ -86,11 +86,11 @@ def predict_smash(input: str):
         list: returns a tuple 
     """    
     seq = tk.texts_to_sequences([input])
-    padded = pad_sequences(seq, maxlen=96)
-    prediction = model.predict(padded)
+    padded = pad_sequences(seq, maxlen=15)
+    prediction = model.predict(padded,verbose=0,)
     unfucked = unfuck_predict(prediction)
-    bottom = unfucked[0]
-    notbottom = unfucked[1]
+    notbottom = unfucked[0]
+    bottom = unfucked[1]
     bigger_value = bigger(unfucked[0], unfucked[1])
     return unfucked, bottom, notbottom, bigger_value
 
@@ -99,13 +99,11 @@ while True:
     txt = input("Enter text: ")
     if txt != "exit":
         gay = predict_smash(txt)
-
-        print("0 " + str(gay[0]))
-        print("1 " + str(gay[1]))
-        print("2 " + str(gay[2]))
-        print("3 " + str(gay[3]))
-
-
+        if gay[3] == 1:
+            print("NOT SMASH")
+        else:
+            print("SMASH")
+        print("-------------------")
     else:
         stop = True
         print("Exiting...")
