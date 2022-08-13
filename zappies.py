@@ -48,7 +48,7 @@ maxwait = 15
 #maxwait = int(config["warning"]["maxwait"])
 
 # Load the model and the tokenizer
-model = tf.keras.models.load_model("model/check.h5")
+model = tf.keras.models.load_model("model/model.h5")
 with open(model_sav_loc + "tokenizer.pickle", "rb") as handle:
     tk = pickle.load(handle)
 
@@ -88,7 +88,7 @@ def predict_smash(input: str):
         list: returns a list in the follow format
     """    
     seq = tk.texts_to_sequences([input])
-    padded = pad_sequences(seq, maxlen=96)
+    padded = pad_sequences(seq, maxlen=15)
     prediction = model.predict(padded)
     unfucked = unfuck_predict(prediction)
     bottom = unfucked[0]
@@ -117,7 +117,7 @@ def on_release(key):
     if num_keys_pressed >= keys_to_keep:
         predict_output = predict_smash(to_string(keys_pressed))
         if predict_output[3] == 2:
-            zap()
+            action()
         num_keys_pressed = 0
         print("Done")
         print(keys_pressed)
@@ -132,6 +132,7 @@ def create_listener():
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
 
+
 def warning_handler() -> int:
     if randomenable == True:
         warning = random.randint(minwait, maxwait)
@@ -140,22 +141,29 @@ def warning_handler() -> int:
         return warning
 
 # Actions
-def zap(username: str, apikey: str, sharecode: str, name: str, duration: int, intensity: int):
+def zap(username=username, apikey=apikey, sharecode=sharecode, name=name, duration=duration, intensity=intensity):
     piShock(username, apikey, sharecode, name, duration, intensity, warning_handler()).shock()
     print("ZAP")
 
-def vibe(username: str, apikey: str, sharecode: str, name: str, duration: int, intensity: int):
+def vibe(username=username, apikey=apikey, sharecode=sharecode, name=name, duration=duration, intensity=intensity):
     piShock(username, apikey, sharecode, name, duration, intensity).vibe()
     print("BUZZ")
 
 
-def beep(username: str, apikey: str, sharecode: str, name: str, duration: int):
+def tone(username: str, apikey: str, sharecode: str, name: str, duration: int):
     piShock(username, apikey, sharecode, name, duration).beep()
     print("BEEP")
 
+def action():
+    if mode == "shock":
+        zap()
+    elif mode == "buzz":
+        vibe()
+    elif mode == "tone":
+        tone()
+    else:
+        print("WHAT THE HELLS GOING ON?")
 
-""" while True:
+while True:
     create_listener()
     sleep(sleep_time)
- """
-
