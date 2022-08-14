@@ -13,10 +13,11 @@
 
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/LakesideMiners/keysmashzappies?color=56BEB8&style=for-the-badge">
 
+
 </p>
 
 <!-- Status -->
-
+Time LakesideMiners Has Spent on this program [![wakatime](https://wakatime.com/badge/github/LakesideMiners/keysmashzappies.svg)](https://wakatime.com/badge/github/LakesideMiners/keysmashzappies)
 <h4 align="center"> 
 	🚧  Keysmashzappies 🚀 Under construction...  🚧
 </h4> 
