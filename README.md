@@ -17,7 +17,7 @@
 </p>
 
 <!-- Status -->
-Time LakesideMiners Has Spent on this program [![wakatime](https://wakatime.com/badge/github/LakesideMiners/keysmashzappies.svg)](https://wakatime.com/badge/github/LakesideMiners/keysmashzappies)
+<a href="https://wakatime.com/badge/github/LakesideMiners/keysmashzappies"><img src="https://wakatime.com/badge/github/LakesideMiners/keysmashzappies.svg" alt="wakatime"></a>
 <h4 align="center"> 
 	🚧  Keysmashzappies 🚀 Under construction...  🚧
 </h4> 
