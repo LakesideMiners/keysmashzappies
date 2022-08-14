@@ -1,11 +1,5 @@
 <div align="center" id="top"> 
-<div style="font-family: monospace, fixed; font-weight: bold;">
-<span style=";color:#f5f">&#9484;&#9472;</span><span style=";color:#f55">&#9472;&#9472;</span><span style=";color:#ff5">&#9472;&#9472;</span><span style=";color:#5f5">&#9472;&#9472;</span><span style=";color:#5ff">&#9472;&#9472;</span><span style=";color:#55f">&#9472;&#9472;</span><span style=";color:#f5f">&#9472;&#9472;</span><span style=";color:#f55">&#9472;&#9472;</span><span style=";color:#ff5">&#9488;</span><br />
-<span style=";color:#f55">&#9474;&#9612;</span><span style="">&#160;</span><span style=";color:#ff5">&#9612;</span><span style=";color:#5f5">&#9630;&#9600;</span><span style=";color:#5ff">&#9622;&#9600;</span><span style=";color:#55f">&#9600;&#9612;</span><span style="">&#160;&#160;&#160;&#160;&#160;&#160;</span><span style=";color:#5f5">&#9474;</span><br />
-<span style=";color:#ff5">&#9474;&#9625;</span><span style=";color:#5f5">&#9630;</span><span style="">&#160;</span><span style=";color:#5ff">&#9626;&#9604;</span><span style="">&#160;&#160;</span><span style=";color:#f5f">&#9630;</span><span style="">&#160;</span><span style=";color:#f55">&#9629;&#9600;</span><span style=";color:#ff5">&#9622;&#9627;</span><span style=";color:#5f5">&#9600;&#9622;</span><span style=";color:#5ff">&#9474;</span><br />
-<span style=";color:#5f5">&#9474;&#9612;</span><span style=";color:#5ff">&#9629;&#9622;</span><span style=";color:#55f">&#9622;</span><span style="">&#160;</span><span style=";color:#f5f">&#9612;&#9630;</span><span style="">&#160;&#160;</span><span style=";color:#ff5">&#9630;&#9600;</span><span style=";color:#5f5">&#9612;&#9625;</span><span style=";color:#5ff">&#9604;&#9624;</span><span style=";color:#55f">&#9474;</span><br />
-<span style=";color:#5ff">&#9474;&#9624;</span><span style="">&#160;</span><span style=";color:#55f">&#9624;</span><span style=";color:#f5f">&#9629;&#9600;</span><span style="">&#160;</span><span style=";color:#f55">&#9600;</span><span style=";color:#ff5">&#9600;&#9624;</span><span style=";color:#5f5">&#9629;&#9600;</span><span style=";color:#5ff">&#9624;&#9612;</span><span style="">&#160;&#160;</span><span style=";color:#f5f">&#9474;</span><br />
-<span style=";color:#55f">&#9492;&#9472;</span><span style=";color:#f5f">&#9472;&#9472;</span><span style=";color:#f55">&#9472;&#9472;</span><span style=";color:#ff5">&#9472;&#9472;</span><span style=";color:#5f5">&#9472;&#9472;</span><span style=";color:#5ff">&#9472;&#9472;</span><span style=";color:#55f">&#9472;&#9472;</span><span style=";color:#f5f">&#9472;&#9472;</span><span style=";color:#f55">&#9496;</span><br />
+
 </div>
   <!-- <a href="https://keysmashzappies.netlify.app">Demo</a> -->
 </div>
@@ -13,13 +7,11 @@
 <h1 align="center">Keysmashzappies</h1>
 
 <p align="center">
-  <img alt="Github top language" src="https://img.shields.io/github/languages/top/LakesideMiners/keysmashzappies?color=56BEB8">
+  <img alt="Github top language" src="https://img.shields.io/github/languages/top/LakesideMiners/keysmashzappies?color=56BEB8&style=for-the-badge">
 
-  <img alt="Github language count" src="https://img.shields.io/github/languages/count/LakesideMiners/keysmashzappies?color=56BEB8">
+  <img alt="Github language count" src="https://img.shields.io/github/languages/count/LakesideMiners/keysmashzappies?color=56BEB8&style=for-the-badge">
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/LakesideMiners/keysmashzappies?color=56BEB8">
-
-  <img alt="License" src="https://img.shields.io/github/license/LakesideMiners/keysmashzappies?color=56BEB8">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/LakesideMiners/keysmashzappies?color=56BEB8&style=for-the-badge">
 
 </p>
 
