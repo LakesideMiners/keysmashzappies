@@ -50,8 +50,11 @@ help.
 ## Features ##
 
 :heavy_check_mark: Get zapped when you keysmash
+
 :heavy_check_mark: Shit Code!
+
 :heavy_check_mark: Pain!
+
 :heavy_check_mark: Overly Edgy and fed up dev!
 
 ## Technologies ##
